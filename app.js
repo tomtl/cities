@@ -5,4 +5,4 @@ app.get('/', function(request, response){
   response.send('OK');
 });
 
-app.listen(process.env.PORT);
+module.exports = app;
