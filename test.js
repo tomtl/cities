@@ -75,7 +75,6 @@ describe('Creating new cities', function(){
       .post('/cities')
       .send('name=&description=')
       .expect(400, done);
-
   });
 })
 
@@ -92,5 +91,33 @@ describe('Deleting cities', function(){
     request(app)
       .delete('/cities/Banana')
       .expect(204, done)
+  });
+});
+
+describe('Shows city info', function(){
+  before(function(){
+    client.hset('cities', 'Banana', 'town of fruit');
+  });
+
+  after(function(){
+    client.flushdb();
+  });
+
+  it('Returns 200 status code', function(done){
+    request(app)
+      .get('/cities/Banana')
+      .expect(200, done);
+  });
+
+  it('Returns HTML format', function(done){
+    request(app)
+      .get('/cities/Banana')
+      .expect('Content-Type', /html/, done);
+  });
+
+  it('Returns information for given city', function(done){
+    request(app)
+      .get('/cities/Banana')
+      .expect(/fruit/, done);
   });
 });
